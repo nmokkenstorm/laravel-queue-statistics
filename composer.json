@@ -1,0 +1,17 @@
+{
+    "name": "nmokkenstorm/laravel-queue-statistics",
+    "description": "A simple monitor for Laravel queue statistics",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Niels Mokkenstorm",
+            "email": "niels@sustainabil.it"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3",
+        "illuminate/support": "^5.5",
+        "illuminate/contracts": "^5.5"
+    }
+}
