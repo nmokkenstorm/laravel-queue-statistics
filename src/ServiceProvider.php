@@ -4,8 +4,7 @@ namespace Nmokkenstorm\LaravelQueueStatistics;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
-use Illuminate\Queue\QueueManager;
-use Illuminate\Contracts\Queue\Queue;
+use Illuminate\Contracts\Queue\Factory;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -16,10 +15,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $decorator = function (Queue $queue, Container $app) {
-            return new QueueEventDecorator($queue);
-        };
-        
-        $this->app->resolving(Queue::class, $decorator);
+        $this->app->extend('queue', function ($factory) {
+            return new QueueFactoryDecorator($factory);
+        });
     } 
 }

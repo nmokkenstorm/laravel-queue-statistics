@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Nmokkenstorm\\LaravelQueueStatistics\\": "src"
+            "Nmokkenstorm\\LaravelQueueStatistics\\": "src/"
         }
     },
     "extra": {

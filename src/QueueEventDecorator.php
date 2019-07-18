@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelQueueStatistics;
+namespace Nmokkenstorm\LaravelQueueStatistics;
 
 use Illuminate\Contracts\Queue\Queue;
 
@@ -40,8 +40,6 @@ class QueueEventDecorator implements Queue
      */
     public function push($job, $data = '', $queue = null)
     {
-        print_r('pushing job');
-
         return $this->queue->push($job, $data, $queue);
     }
 
@@ -110,7 +108,7 @@ class QueueEventDecorator implements Queue
      */
     public function bulk($jobs, $data = '', $queue = null)
     {
-        return $this->bulk($jobs, $data, $queue);
+        return $this->queue->bulk($jobs, $data, $queue);
     }
 
     /**
@@ -121,9 +119,7 @@ class QueueEventDecorator implements Queue
      */
     public function pop($queue = null)
     {
-        print_r('popping job');
-        
-        return $this->pop($queue);
+        return $this->queue->pop($queue);
     }
 
     /**
