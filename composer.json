@@ -1,6 +1,7 @@
 {
     "name": "nmokkenstorm/laravel-queue-statistics",
     "description": "A simple monitor for Laravel queue statistics",
+    "homepage": "https://github.com/nmokkenstorm/laravel-queue-statistics",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -13,5 +14,20 @@
         "php": "^7.1.3",
         "illuminate/support": "^5.5",
         "illuminate/contracts": "^5.5"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Nmokkenstorm\\LaravelQueueStatistics\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nmokkenstorm\\LaravelQueueStatistics\\ServiceProvider"
+            ]
+        }
     }
 }
