@@ -3,6 +3,7 @@
 namespace Nmokkenstorm\LaravelQueueStatistics;
 
 use Illuminate\Contracts\Queue\Queue;
+use Illuminate\Contracts\Queue\Job;
 
 class QueueEventDecorator implements Queue
 {
@@ -12,11 +13,18 @@ class QueueEventDecorator implements Queue
     private $queue;
 
     /**
-     * @param \Illuminate\Contracts\Queue\Queue $queue
+     * @var \Nmokkenstorm\LaravelQueueStatistics\Publisher
      */
-    public function __construct(Queue $queue)
+    private $publisher;
+
+    /**
+     * @param \Illuminate\Contracts\Queue\Queue $queue
+     * @param \Nmokkenstorm\LaravelQueueStatistics\Publisher
+     */
+    public function __construct(Queue $queue, Publisher $publisher)
     {
-        $this->queue = $queue;
+        $this->queue     = $queue;
+        $this->publisher = $publisher;
     }
 
     /**
@@ -40,7 +48,30 @@ class QueueEventDecorator implements Queue
      */
     public function push($job, $data = '', $queue = null)
     {
-        return $this->queue->push($job, $data, $queue);
+        $result = $this->queue->push($job, $data, $queue);
+
+        $this->publisher->publish($result, get_class($job), 'push', $queue);
+
+        return $result;
+    }
+
+    /**
+     * Pop the next job off of the queue.
+     *
+     * @param  string  $queue
+     * @return \Illuminate\Contracts\Queue\Job|null
+     */
+    public function pop($queue = null)
+    {
+        return $this->queue->pop;
+        /*
+        $job = $this->queue->pop($queue);
+
+        if ($job) { 
+            $this->publisher->publish($job->getJobId(), get_class($job), 'pop', $queue);
+        }
+        
+        return $job;*/
     }
 
     /**
@@ -109,17 +140,6 @@ class QueueEventDecorator implements Queue
     public function bulk($jobs, $data = '', $queue = null)
     {
         return $this->queue->bulk($jobs, $data, $queue);
-    }
-
-    /**
-     * Pop the next job off of the queue.
-     *
-     * @param  string  $queue
-     * @return \Illuminate\Contracts\Queue\Job|null
-     */
-    public function pop($queue = null)
-    {
-        return $this->queue->pop($queue);
     }
 
     /**

@@ -12,11 +12,18 @@ class QueueFactoryDecorator implements Factory
     private $factory;
 
     /**
-     * @param \Illuminate\Contracts\Queue\Factory $factory
+     * @var \Nmokkenstorm\LaravelQueueStatistics\Publisher
      */
-    public function __construct(Factory $factory)
+    private $publisher;
+
+    /**
+     * @param \Illuminate\Contracts\Queue\Factory $factory
+     * @param \Nmokkenstorm\LaravelQueueStatistics\Publisher
+     */
+    public function __construct(Factory $factory, Publisher $publisher)
     {
-        $this->factory = $factory;
+        $this->factory  = $factory;
+        $this->publisher= $publisher;
     }
     
     /**
@@ -27,7 +34,7 @@ class QueueFactoryDecorator implements Factory
      */
     public function connection($name = null)
     {
-        return new QueueEventDecorator($this->factory->connection($name));
+        return new QueueEventDecorator($this->factory->connection($name), $this->publisher);
     }
 
     /**
