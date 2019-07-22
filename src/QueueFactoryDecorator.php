@@ -22,8 +22,8 @@ class QueueFactoryDecorator implements Factory
      */
     public function __construct(Factory $factory, Publisher $publisher)
     {
-        $this->factory  = $factory;
-        $this->publisher= $publisher;
+        $this->factory      = $factory;
+        $this->publisher    = $publisher;
     }
     
     /**

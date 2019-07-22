@@ -15,7 +15,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public $singletons = [
         Publisher::class                          => Publisher::class,
-        Contracts\FlushStrategy::class            => StackCountFlushStrategy::class,
+        Contracts\FlushStrategy::class            => FlushStrategies\StackCountFlushStrategy::class,
         Contracts\PublishesQueueStatistics::class => Publishers\DatabasePublisher::class 
     ];
 

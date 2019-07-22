@@ -31,7 +31,7 @@ class DatabasePublisher implements PublishesQueueStatistics
      */
     public function flush(array $jobs) : void
     {
-        $jobs = collect($jobs)->partition(function ($job) {
+        $jobs = (new Collection($jobs))->partition(function ($job) {
             return $job['event'] == 'queued';
         });
 
