@@ -48,7 +48,8 @@ class Publisher
         $this->stack[] = [
             'id'        => $id,
             'event'     => $event,
-            'queue'     => $queue,
+            'job'       => $job,
+            'queue'     => ($queue ?: 'default'),
             'timestamp' => $this->currentTime()
         ];
 
@@ -65,7 +66,9 @@ class Publisher
      */
     public function __destruct() 
     {
-        $this->publisher->flush($this->stack);
+        if ($this->stack) {
+            $this->publisher->flush($this->stack);
+        }
     } 
 
 }

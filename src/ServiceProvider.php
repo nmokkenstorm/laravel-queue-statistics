@@ -16,7 +16,7 @@ class ServiceProvider extends BaseServiceProvider
     public $singletons = [
         Publisher::class                          => Publisher::class,
         Contracts\FlushStrategy::class            => StackCountFlushStrategy::class,
-        Contracts\PublishesQueueStatistics::class => Publishers\LogPublisher::class 
+        Contracts\PublishesQueueStatistics::class => Publishers\DatabasePublisher::class 
     ];
 
     /**
@@ -29,6 +29,8 @@ class ServiceProvider extends BaseServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/config.php', 'queue-monitor'
         );
+        
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     /**
@@ -38,12 +40,16 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $this->app->extend('queue', function ($factory, $app) {
-            return new QueueFactoryDecorator($factory, $app->make(Publisher::class));
+        $this->app
+             ->when(StackCountFlushStrategy::class)
+             ->needs('$threshold')
+             ->give( (int) data_get($this->app, 'config.queue-monitor.stack-threshold'));
+
+        $this->app->extend('queue', function ($factory) {
+        
+            return new QueueFactoryDecorator($factory, $this->app->make(Publisher::class));
+        
         });
 
-        $this->app->when(StackCountFlushStrategy::class)
-                  ->needs('$threshold')
-                  ->give((int)data_get($this->app, 'config.queue-monitor.stack-threshold'));
     } 
 }

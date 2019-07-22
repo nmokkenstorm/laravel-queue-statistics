@@ -50,7 +50,7 @@ class QueueEventDecorator implements Queue
     {
         $result = $this->queue->push($job, $data, $queue);
 
-        $this->publisher->publish($result, get_class($job), 'push', $queue);
+        $this->publisher->publish( (string) $result, get_class($job), 'queued', $queue);
 
         return $result;
     }
@@ -63,15 +63,11 @@ class QueueEventDecorator implements Queue
      */
     public function pop($queue = null)
     {
-        return $this->queue->pop;
-        /*
-        $job = $this->queue->pop($queue);
-
-        if ($job) { 
-            $this->publisher->publish($job->getJobId(), get_class($job), 'pop', $queue);
+        if ($job = $this->queue->pop($queue)) {
+            $this->publisher->publish((string)$job->getJobId(), get_class($job), 'started', $queue);
         }
         
-        return $job;*/
+        return $job;
     }
 
     /**
@@ -86,7 +82,6 @@ class QueueEventDecorator implements Queue
     {
         return $this->queue->pushOn($queue, $job, $data);
     }
-
 
     /**
      * Push a raw payload onto the queue.

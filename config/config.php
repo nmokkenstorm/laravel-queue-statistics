@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'stack-threshold' => 5
+    'stack-threshold'   => 5,
 ];
