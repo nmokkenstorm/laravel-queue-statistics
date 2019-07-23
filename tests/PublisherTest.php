@@ -1,7 +1,8 @@
 <?php
 
+namespace Nmokkenstorm\LaravelQueueStatistics\Tests;
+
 use Carbon\Carbon;
-use PHPUnit\Framework\TestCase;
 
 use Nmokkenstorm\LaravelQueueStatistics\Publisher;
 use Nmokkenstorm\LaravelQueueStatistics\Contracts\FlushStrategy;
@@ -12,13 +13,13 @@ class PublisherTest extends TestCase
     /**
      * @test
      */
-    public function it_should_work()
+    public function it_should_flush_correctly()
     {
 
         Carbon::setTestNow(Carbon::now());
 
-        $flushStrategy  = Mockery::mock(FlushStrategy::class);
-        $publishBackend = Mockery::mock(PublishesQueueStatistics::class);
+        $flushStrategy  = \Mockery::mock(FlushStrategy::class);
+        $publishBackend = \Mockery::mock(PublishesQueueStatistics::class);
 
         $parameters = [
             [
@@ -43,8 +44,5 @@ class PublisherTest extends TestCase
 
         $publisher->publish($parameters[0]['id'], $parameters[0]['job'], $parameters[0]['event'], $parameters[0]['queue']);
 
-        $this->addToAssertionCount(
-            Mockery::getContainer()->mockery_getExpectationCount()
-        );
     }
 }
