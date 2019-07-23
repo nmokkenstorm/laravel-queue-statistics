@@ -49,4 +49,32 @@ class PublisherTest extends TestCase
 
         $publisher->publish($this->parameters['id'], $this->parameters['job'], $this->parameters['event'], $this->parameters['queue']);
     }
+
+    /**
+     * @test
+     */
+    public function it_should_implement_strategies_correctly()
+    {
+        $this->flushStrategy
+             ->shouldReceive('shouldFlush')
+             ->once()
+             ->with([$this->parameters])
+             ->andReturn(false);
+
+        $this->flushStrategy
+             ->shouldReceive('shouldFlush')
+             ->once()
+             ->with([$this->parameters, $this->parameters])
+             ->andReturn(true);
+
+        $this->publishBackend
+             ->shouldReceive('flush')
+             ->once()
+             ->with([$this->parameters, $this->parameters]);
+
+        $publisher = new Publisher($this->flushStrategy, $this->publishBackend);
+
+        $publisher->publish($this->parameters['id'], $this->parameters['job'], $this->parameters['event'], $this->parameters['queue']);
+        $publisher->publish($this->parameters['id'], $this->parameters['job'], $this->parameters['event'], $this->parameters['queue']);
+    }
 }
