@@ -15,9 +15,6 @@ class PublisherTest extends TestCase
      */
     public function it_should_flush_correctly()
     {
-
-        Carbon::setTestNow(Carbon::now());
-
         $flushStrategy  = \Mockery::mock(FlushStrategy::class);
         $publishBackend = \Mockery::mock(PublishesQueueStatistics::class);
 
